@@ -1,21 +1,19 @@
-# TaxAI - Sistema Inteligente para Biodiversity Informatics
+# TaxAI - Modelo de IA para Compreensão de Taxa Biológicas
 
-> **Plataforma de IA para busca semântica, classificação e análise de dados taxonômicos baseada em RAG (Retrieval-Augmented Generation)**
+> **Um modelo de inteligência artificial que compreende o conceito de espécie biológica (taxa), representando-as como "tokens" codificando suas características, relações hierárquicas e ecológicas**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
 [![PostgreSQL](https://img.shields.io/badge/postgresql-16+-blue.svg)](https://www.postgresql.org/)
-[![Meilisearch](https://img.shields.io/badge/meilisearch-1.8+-orange.svg)](https://www.meilisearch.com/)
+[![MongoDB](https://img.shields.io/badge/mongodb-5.0+-green.svg)](https://www.mongodb.com/)
 
 ## 📋 Índice
 
 - [Visão Geral](#-visão-geral)
-- [Contexto Científico](#-contexto-científico)
 - [Objetivos](#-objetivos)
-- [Arquitetura do Sistema](#-arquitetura-do-sistema)
+- [Arquitetura Proposta](#-arquitetura-proposta)
+- [Componentes Principais](#-componentes-principais)
 - [Stack Tecnológico](#-stack-tecnológico)
-- [Fontes de Dados](#-fontes-de-dados)
-- [Etapas de Implementação](#-etapas-de-implementação)
 - [Modelos e Repositórios Relevantes](#-modelos-e-repositórios-relevantes)
 - [Referências Bibliográficas](#-referências-bibliográficas)
 - [Contribuindo](#-contribuindo)
@@ -23,126 +21,118 @@
 
 ## 🌍 Visão Geral
 
-O **TaxAI** é uma plataforma open-source de biodiversity informatics que combina técnicas avançadas de IA, incluindo Large Language Models (LLMs) e Retrieval-Augmented Generation (RAG), para resolver desafios complexos em taxonomia e análise de biodiversidade.
+O **TaxAI** é um projeto de pesquisa que visa desenvolver um modelo de inteligência artificial capaz de compreender o conceito de espécie biológica (taxa). Este modelo representa cada taxa como um "token" que encapsula:
 
-O projeto integra uma base robusta de **300.000 nomes de espécies** (fauna, flora e fungos) e **11 milhões de registros de ocorrência** seguindo o padrão Darwin Core, com capacidades de busca semântica, classificação automática de espécies e análise exploratória de dados.
+- **Características fenotípicas e genotípicas** da espécie
+- **Relações hierárquicas biológicas** (filo, classe, ordem, família, gênero)
+- **Relações ecológicas** e distribuição geográfica
+- **Ambiguidade nomenclatural** (sinonímias, homonímias)
 
-### Desafios Abordados
+O projeto integra:
+- **300.000 nomes de espécies** da fauna, flora e fungos (MongoDB)
+- **11 milhões de registros de ocorrência** seguindo o padrão Darwin Core
+- **Literatura científica** (monografias, revisões taxonômicas, descrições de novas espécies em PDF)
+- **Modelos de embedding vetorial** para representação semântica de taxa
 
-A biodiversity informatics enfrenta desafios críticos que o TaxAI busca resolver:
-
-- **Impedimento Taxonômico**: Escassez de taxonomistas vs. crescente volume de dados
-- **Ambiguidade Nomenclatural**: Sinonímias, homonímias e mudanças conceituais
-- **Conceitos de Espécie**: Múltiplos conceitos (biológico, morfológico, filogenético, evolutivo)
-- **Integração de Dados**: Dados dispersos em diferentes formatos e repositórios
-- **Escalabilidade**: Necessidade de processar milhões de registros eficientemente
-
-## 🔬 Contexto Científico
-
-### Conceitos de Espécie em Biodiversity Informatics
-
-O projeto fundamenta-se em conceitos modernos de taxonomia:
-
-- **Biological Species Concept (BSC)**: Comunidades reprodutivas isoladas
-- **Morphological Species Concept (MSC)**: Agrupamentos por características morfológicas
-- **Lineage Species Concept (LSC)**: Trajetórias evolutivas distintas em árvores filogenéticas
-- **Integrative Unified Species Concept (iUSC)**: Fusão automática de múltiplas fontes de dados
-
-### IA e Machine Learning em Taxonomia
-
-Estudos recentes demonstram que:
-
-- **Deep Learning** pode identificar espécies com >90% de acurácia em datasets balanceados
-- **RAG systems** superam LLMs puros em classificação de taxa raros
-- **Multimodal models** (visão + texto + DNA) melhoram significativamente a identificação
-- **Semantic search** permite consultas complexas sobre conceitos taxonômicos
+O objetivo é criar uma **base de dados vetorial** que permita ao modelo:
+- Associar tokens (nomes científicos) a características e atributos
+- Compreender relações filogenéticas e ecológicas
+- Realizar busca semântica e matching de espécies
+- Classificar novos organismos com base em descrições textuais ou dados de ocorrência
 
 ## 🎯 Objetivos
 
 ### Objetivos Principais
 
-1. **Busca Semântica Avançada**
-   - Consultas em linguagem natural sobre taxonomia
-   - Busca por similaridade em descrições de espécies
-   - Navegação hierárquica inteligente na taxonomia
+1. **Desenvolver Representação Vetorial de Taxa**
+   - Criar embeddings semânticos que capturem características biológicas
+   - Codificar relações hierárquicas e ecológicas em espaço vetorial
+   - Permitir operações de similaridade vetorial entre taxa
 
-2. **Classificação e Identificação Automática**
-   - Identificação de espécies a partir de descrições morfológicas
-   - Classificação baseada em dados de ocorrência e distribuição
-   - Matching de nomes científicos com resolução de sinonímias
+2. **Treinar Modelo Especializado em Taxonomia**
+   - Fine-tuning de modelos de linguagem em literatura taxonômica
+   - Modelos de embedding otimizados para conceitos biológicos
+   - Integração de múltiplas modalidades (texto, DNA, imagem)
 
-3. **Análise e Visualização de Dados**
-   - Análise exploratória de padrões de biodiversidade
-   - Visualização de distribuições geográficas
-   - Análise de relações taxonômicas e filogenéticas
+3. **Classificação e Identificação de Organismos**
+   - Identificar espécies a partir de descrições textuais
+   - Matching automático com resolução de sinonímias
+   - Classificação baseada em características fenotípicas
 
-4. **Treinamento de Modelos Especializados**
-   - Fine-tuning de LLMs em literatura taxonômica
-   - Modelos multimodais para classificação
-   - Transfer learning de modelos pré-treinados
+4. **Busca e Recuperação Semântica**
+   - Busca semântica em base de 300k espécies
+   - Recuperação de literatura relevante (PDFs)
+   - Consultas em linguagem natural sobre conceitos taxonômicos
+   - Análise de relações filogenéticas e ecológicas
 
-## 🏗️ Arquitetura do Sistema
+## 🏗️ Arquitetura Proposta
 
 ### Arquitetura Geral
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Interface Layer                          │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│  │  Web UI  │  │ REST API │  │ GraphQL  │  │  Jupyter │   │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                    Application Layer                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │   RAG Engine │  │  Taxonomy    │  │ Classification│     │
-│  │   (LangChain)│  │  Resolver    │  │    Engine     │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                     AI/ML Layer                              │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │     LLM      │  │  Embedding   │  │   Fine-tuned │     │
-│  │  (Llama 3.x) │  │    Models    │  │   Bio Models │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
-└─────────────────────────────────────────────────────────────┘
-                              │
-┌─────────────────────────────────────────────────────────────┐
-│                      Data Layer                              │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │  PostgreSQL  │  │  Meilisearch │  │   MongoDB    │     │
-│  │  + pgvector  │  │  (Search)    │  │  (Source)    │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│                   Interface & Application                 │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────┐ │
+│  │   Search UI    │  │   REST API     │  │  Notebooks │ │
+│  └────────────────┘  └────────────────┘  └────────────┘ │
+└──────────────────────────────────────────────────────────┘
+                           │
+┌──────────────────────────────────────────────────────────┐
+│                   AI/ML Processing                        │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────┐ │
+│  │ Embedding      │  │ LLM / RAG      │  │ Fine-tuned │ │
+│  │ Models         │  │ (LangChain)    │  │ Bio Models │ │
+│  └────────────────┘  └────────────────┘  └────────────┘ │
+└──────────────────────────────────────────────────────────┘
+                           │
+┌──────────────────────────────────────────────────────────┐
+│                    Vector Store Layer                     │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────┐ │
+│  │ PostgreSQL +   │  │ Meilisearch    │  │   FAISS    │ │
+│  │ pgvector       │  │ (Hybrid Search)│  │   (Index)  │ │
+│  └────────────────┘  └────────────────┘  └────────────┘ │
+└──────────────────────────────────────────────────────────┘
+                           │
+┌──────────────────────────────────────────────────────────┐
+│                    Data Sources                          │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────┐ │
+│  │ MongoDB        │  │ PDF Documents  │  │ Darwin Core│ │
+│  │ (300k species) │  │ (Literature)   │  │ Records    │ │
+│  └────────────────┘  └────────────────┘  └────────────┘ │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ### Componentes Principais
 
-#### 1. **Data Management Layer**
+#### 1. **Data Sources**
 
-- **MongoDB**: Armazenamento dos dados originais (300k espécies + 11M ocorrências)
-- **PostgreSQL + pgvector**: Banco de dados vetorial para embeddings
-- **Meilisearch**: Motor de busca híbrida (full-text + semântica)
+- **MongoDB**: 300.000 nomes de espécies com metadados taxonômicos
+- **Darwin Core Records**: 11 milhões de registros de ocorrência geoespaciais
+- **PDF Library**: Monografias, revisões taxonômicas, descrições de novas espécies
 
-#### 2. **AI/ML Processing Layer**
+#### 2. **Vector Store & Search**
 
-- **LLM Engine**: Modelos de linguagem para geração e raciocínio
-- **Embedding Generator**: Criação de embeddings para busca semântica
-- **Fine-tuning Pipeline**: Treinamento de modelos especializados
+- **PostgreSQL + pgvector**: Armazenamento de embeddings de taxa e documentos
+- **Meilisearch**: Busca híbrida (full-text + semantic search)
+- **FAISS/Annoy**: Índices para busca rápida de similaridade vetorial
 
-#### 3. **RAG System**
+#### 3. **Embedding & Representation Layer**
 
-- **Document Processor**: Chunking e processamento de documentos científicos
-- **Retrieval System**: Busca contextual em múltiplas fontes
-- **Generation System**: Síntese de informações com citações
+- **Embedding Generator**: Cria vetores para cada espécie/nome científico
+- **Document Embedder**: Processa literatura científica em chunked embeddings
+- **Fine-tuned Models**: Modelos otimizados para conceitos biológicos
 
-#### 4. **Taxonomy Services**
+#### 4. **LLM & RAG System**
 
-- **Name Resolver**: Resolução de nomes científicos e sinonímias
-- **Hierarchy Navigator**: Navegação na árvore taxonômica
-- **Concept Matcher**: Matching entre diferentes conceitos de espécie
+- **LLM Engine**: Modelos de linguagem para raciocínio taxonômico
+- **RAG Pipeline**: Recuperação contextual de literatura + síntese
+- **Prompt Engineering**: Prompts especializados para taxonomia
+
+#### 5. **Application Services**
+
+- **Name Resolution**: Matching de nomes científicos e resolução de sinonímias
+- **Taxonomic Hierarchy**: Navegação e queries na árvore taxonômica
+- **Species Classifier**: Classificação de organismos descritos
 
 ## 🛠️ Stack Tecnológico
 
@@ -224,257 +214,6 @@ Estudos recentes demonstram que:
 - **Prometheus**: Métricas
 - **Grafana**: Dashboards de monitoramento
 - **Loguru**: Logging estruturado
-
-## 📊 Fontes de Dados
-
-### Dados Internos (MongoDB)
-
-- **300.000 nomes de espécies**:
-  - Fauna (Animalia)
-  - Flora (Plantae)
-  - Fungos (Fungi)
-  - Metadados taxonômicos completos
-  
-- **11 milhões de registros de ocorrência**:
-  - Seguem padrão Darwin Core
-  - Coordenadas geográficas
-  - Dados temporais
-  - Metadados de coleta
-
-### Literatura Científica
-
-- **Monografias de Espécies**: Descrições detalhadas
-- **Revisões Taxonômicas**: Estudos de grupos taxonômicos
-- **Artigos de Novas Espécies**: Descrições originais
-- **Literatura Complementar**: Ecologia, biogeografia, etc.
-
-### Integrações Externas (Futuro)
-
-- **GBIF**: Global Biodiversity Information Facility
-- **BOLD**: Barcode of Life Data System
-- **EOL**: Encyclopedia of Life
-- **WoRMS**: World Register of Marine Species
-- **Catalogue of Life**: Lista global de espécies
-
-## 🚀 Etapas de Implementação
-
-### Fase 1: Infraestrutura e ETL
-
-**Objetivo**: Estabelecer a base de dados e infraestrutura
-
-1. **Setup de Ambiente**
-   - Configuração de containers Docker no UNRAID
-   - Deploy de PostgreSQL + pgvector
-   - Deploy de Meilisearch
-   - Setup de Ollama para modelos LLM
-
-2. **ETL Pipeline**
-   - Migração de dados do MongoDB para PostgreSQL
-   - Normalização e limpeza de dados Darwin Core
-   - Criação de índices e otimizações
-   - Validação de integridade dos dados
-
-3. **Processamento de Literatura**
-   - Coleta e organização de documentos científicos
-   - Extração de texto de PDFs
-   - Chunking estratégico de documentos
-   - Metadata extraction (autores, ano, DOI, taxa mencionados)
-
-### Fase 2: Indexação e Busca
-
-**Objetivo**: Implementar sistema de busca semântica
-
-1. **Geração de Embeddings**
-   - Seleção e avaliação de modelos de embedding
-   - Geração de embeddings para descrições de espécies
-   - Embeddings de chunks de literatura científica
-   - Armazenamento em pgvector
-
-2. **Configuração do Meilisearch**
-   - Definição de índices (espécies, ocorrências, documentos)
-   - Configuração de campos searchable e filterable
-   - Setup de sinônimos taxonômicos
-   - Configuração de embedders para busca híbrida
-
-3. **Implementação de Busca**
-   - API de busca full-text
-   - API de busca semântica (embeddings)
-   - Busca híbrida (combinação de ambas)
-   - Ranking e relevância
-
-### Fase 3: Sistema RAG
-
-**Objetivo**: Implementar RAG para consultas inteligentes
-
-1. **RAG Pipeline com LangChain**
-   - Setup de chains básicas (retrieval + generation)
-   - Implementação de prompt engineering
-   - Configuração de contexto e memória
-   - Sistema de citações e referências
-
-2. **Retrieval Strategies**
-   - Dense retrieval (embeddings)
-   - Sparse retrieval (BM25, TF-IDF)
-   - Hybrid search (fusion strategies)
-   - Reranking com cross-encoders
-
-3. **Advanced RAG Techniques**
-   - Multi-query retrieval
-   - Hypothetical document embeddings (HyDE)
-   - Parent-child chunking
-   - Recursive retrieval
-   - Query decomposition
-
-### Fase 4: Taxonomy Services
-
-**Objetivo**: Resolver desafios nomenclaturais
-
-1. **Name Resolution**
-   - Matching fuzzy de nomes científicos
-   - Resolução de sinonímias
-   - Detecção de homonímias
-   - Validação nomenclatural
-
-2. **Taxonomy Hierarchy**
-   - Navegação na árvore taxonômica
-   - Queries ancestrais e descendentes
-   - Visualização de hierarquias
-   - Export em diferentes formatos
-
-3. **Taxonomic Concepts**
-   - Tracking de mudanças conceituais
-   - Linking entre diferentes circumscrições
-   - Histórico de revisões taxonômicas
-
-### Fase 5: Classificação Automática
-
-**Objetivo**: Modelos de classificação e identificação
-
-1. **Text-based Classification**
-   - Fine-tuning de BERT/RoBERTa em descrições
-   - Classification de taxa a partir de texto
-   - Confidence scoring
-   - Explicabilidade das classificações
-
-2. **Multimodal Classification (Futuro)**
-   - Integração de modelos de visão computacional
-   - Classification com DNA barcodes
-   - Fusion de múltiplas modalidades
-   - Transfer learning de modelos pré-treinados
-
-3. **Active Learning Pipeline**
-   - Sistema de feedback humano
-   - Continuous learning
-   - Detecção de casos difíceis
-   - Priorização de anotações
-
-### Fase 6: Fine-tuning de Modelos
-
-**Objetivo**: Treinar modelos especializados
-
-1. **Dataset Preparation**
-   - Curation de dados de treinamento
-   - Balanceamento de classes
-   - Augmentation strategies
-   - Train/val/test splits
-
-2. **Model Fine-tuning**
-   - Fine-tuning de Llama/Mistral em literatura taxonômica
-   - LoRA/QLoRA para eficiência
-   - Domain adaptation de embeddings
-   - Evaluation e benchmarking
-
-3. **Model Deployment**
-   - Quantização de modelos (GGUF)
-   - Optimization para inferência
-   - Model serving com Ollama
-   - A/B testing e monitoring
-
-### Fase 7: APIs e Interfaces
-
-**Objetivo**: Expor funcionalidades
-
-1. **REST API (FastAPI)**
-   - Endpoints de busca
-   - Endpoints de classificação
-   - Endpoints RAG (Q&A)
-   - Documentação OpenAPI/Swagger
-
-2. **GraphQL API (Opcional)**
-   - Schema flexível para queries complexas
-   - Resolvers otimizados
-   - Subscriptions para updates
-
-3. **Web Interface**
-   - Interface de busca amigável
-   - Visualização de resultados
-   - Dashboard de analytics
-   - Interface de annotation/feedback
-
-4. **Jupyter Integration**
-   - Notebooks de exemplo
-   - Python client library
-   - Data exploration tools
-
-### Fase 8: Análise e Visualização
-
-**Objetivo**: Tools para análise exploratória
-
-1. **Geospatial Analysis**
-   - Mapas de distribuição de espécies
-   - Análise de hotspots de biodiversidade
-   - Temporal analysis de ocorrências
-   - Range maps
-
-2. **Statistical Analysis**
-   - Diversidade alfa/beta/gamma
-   - Padrões de riqueza de espécies
-   - Análises filogenéticas
-   - Community composition
-
-3. **Interactive Dashboards**
-   - Dashboard de overview de dados
-   - Exploratory data analysis tools
-   - Custom query builder
-   - Export capabilities
-
-### Fase 9: Otimização e Escalabilidade
-
-**Objetivo**: Performance e produção
-
-1. **Performance Optimization**
-   - Query optimization
-   - Caching strategies
-   - Index optimization
-   - Batch processing
-
-2. **Scalability**
-   - Horizontal scaling de APIs
-   - Database sharding strategies
-   - Load balancing
-   - CDN para assets
-
-3. **Monitoring e Observability**
-   - Métricas de performance
-   - Error tracking
-   - Usage analytics
-   - Alerting
-
-### Fase 10: Documentação e Community
-
-**Objetivo**: Facilitar uso e colaboração
-
-1. **Documentation**
-   - User guides
-   - API documentation
-   - Tutorials e examples
-   - Best practices
-
-2. **Community Building**
-   - Contributing guidelines
-   - Code of conduct
-   - Issue templates
-   - Discussion forums
 
 ## 🤖 Modelos e Repositórios Relevantes
 
@@ -589,23 +328,14 @@ Este é um projeto open-source e contribuições são muito bem-vindas! Por favo
 
 Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
-## 👥 Autores e Reconhecimentos
+## 👥 Projeto
 
-- **Projeto**: TaxAI - Sistema Inteligente para Biodiversity Informatics
+- **Nome**: TaxAI - Modelo de IA para Compreensão de Taxa Biológicas
 - **Repositório**: https://github.com/biopinda/taxai
-- **Contato**: [Adicionar informações de contato]
-
-### Agradecimentos
-
-- Comunidade de Biodiversity Informatics
-- Desenvolvedores dos projetos open-source utilizados
-- GBIF e outras iniciativas de dados abertos em biodiversidade
-- Pesquisadores e taxonomistas que disponibilizam dados e literatura
+- **Licença**: MIT
 
 ---
 
 **Status do Projeto**: 🚧 Em Planejamento
 
 **Última Atualização**: Outubro 2025
-
-Para mais informações, visite: https://github.com/biopinda/taxai
