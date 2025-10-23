@@ -1,17 +1,17 @@
-# TaxAI - Modelo de IA para Compreensão de Taxa Biológicas
+# TaxAI - Desenvolvimento de um Modelo de Inteligência Artificial com Capacidade de Compreender o Conceito de Espécie Biológica
 
-> **Um modelo de inteligência artificial que compreende o conceito de espécie biológica (taxa), representando-as como "tokens" codificando suas características, relações hierárquicas e ecológicas**
+> **Um modelo de IA especializado em taxonomia que compreende e representa espécies biológicas (taxa) como tokens codificando características fenotípicas/genotípicas, relações hierárquicas e ecológicas**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
-[![PostgreSQL](https://img.shields.io/badge/postgresql-16+-blue.svg)](https://www.postgresql.org/)
-[![MongoDB](https://img.shields.io/badge/mongodb-5.0+-green.svg)](https://www.mongodb.com/)
+[![PyTorch](https://img.shields.io/badge/pytorch-2.0+-red.svg)](https://pytorch.org/)
+[![Transformers](https://img.shields.io/badge/transformers-4.30+-blue.svg)](https://huggingface.co/transformers/)
 
 ## 📋 Índice
 
 - [Visão Geral](#-visão-geral)
 - [Objetivos](#-objetivos)
-- [Arquitetura Proposta](#-arquitetura-proposta)
+- [Arquitetura do Modelo](#-arquitetura-do-modelo)
 - [Componentes Principais](#-componentes-principais)
 - [Stack Tecnológico](#-stack-tecnológico)
 - [Modelos e Repositórios Relevantes](#-modelos-e-repositórios-relevantes)
@@ -21,199 +21,188 @@
 
 ## 🌍 Visão Geral
 
-O **TaxAI** é um projeto de pesquisa que visa desenvolver um modelo de inteligência artificial capaz de compreender o conceito de espécie biológica (taxa). Este modelo representa cada taxa como um "token" que encapsula:
+O **TaxAI** é um projeto de pesquisa dedicado ao desenvolvimento de um modelo de inteligência artificial com capacidade de compreender o conceito de espécie biológica (taxa).
 
-- **Características fenotípicas e genotípicas** da espécie
-- **Relações hierárquicas biológicas** (filo, classe, ordem, família, gênero)
-- **Relações ecológicas** e distribuição geográfica
-- **Ambiguidade nomenclatural** (sinonímias, homonímias)
+O modelo é treinado em uma base de dados robusta integrada que combina:
+- **300.000 nomes de espécies** (fauna, flora e fungos) com metadados taxonômicos completos
+- **11 milhões de registros de ocorrência** padronizados segundo Darwin Core
+- **Literatura científica especializada** (monografias, revisões taxonômicas, descrições de novas espécies em PDF)
 
-O projeto integra:
-- **300.000 nomes de espécies** da fauna, flora e fungos (MongoDB)
-- **11 milhões de registros de ocorrência** seguindo o padrão Darwin Core
-- **Literatura científica** (monografias, revisões taxonômicas, descrições de novas espécies em PDF)
-- **Modelos de embedding vetorial** para representação semântica de taxa
-
-O objetivo é criar uma **base de dados vetorial** que permita ao modelo:
-- Associar tokens (nomes científicos) a características e atributos
-- Compreender relações filogenéticas e ecológicas
-- Realizar busca semântica e matching de espécies
-- Classificar novos organismos com base em descrições textuais ou dados de ocorrência
+O objetivo é que o modelo aprenda a:
+- **Representar taxa como tokens semânticos** que codificam características fenotípicas e genotípicas
+- **Compreender relações hierárquicas** entre organismos (filo, classe, ordem, família, gênero)
+- **Codificar relações ecológicas** e padrões de distribuição geográfica
+- **Resolver ambiguidade nomenclatural** (sinonímias, homonímias, conceitos variáveis)
+- **Generalizar para novos casos** de classificação e identificação taxonômica
 
 ## 🎯 Objetivos
 
-### Objetivos Principais
-
-1. **Desenvolver Representação Vetorial de Taxa**
-   - Criar embeddings semânticos que capturem características biológicas
-   - Codificar relações hierárquicas e ecológicas em espaço vetorial
-   - Permitir operações de similaridade vetorial entre taxa
+1. **Aprender Representação Semântica de Taxa**
+   - Codificar espécies como embeddings vetoriais que capturem características fenotípicas/genotípicas
+   - Modelar relações hierárquicas entre taxa no espaço vetorial
+   - Capturar padrões ecológicos e distribuição geográfica
+   - Permitir operações de similaridade entre organismos
 
 2. **Treinar Modelo Especializado em Taxonomia**
-   - Fine-tuning de modelos de linguagem em literatura taxonômica
-   - Modelos de embedding otimizados para conceitos biológicos
-   - Integração de múltiplas modalidades (texto, DNA, imagem)
+   - Fine-tuning de modelos transformer em literatura taxonômica científica
+   - Otimização para compreensão de conceitos biológicos complexos
+   - Múltiplas modalidades de entrada (texto, dados estruturados, metadados)
 
-3. **Classificação e Identificação de Organismos**
-   - Identificar espécies a partir de descrições textuais
-   - Matching automático com resolução de sinonímias
-   - Classificação baseada em características fenotípicas
+3. **Classificar e Identificar Organismos**
+   - Identificar espécies a partir de descrições textuais e características
+   - Matching automático de novos espécimes com taxa conhecidas
+   - Resolução automática de sinonímias e nomes alternativos
+   - Classificação em hierarquia taxonômica completa
 
-4. **Busca e Recuperação Semântica**
-   - Busca semântica em base de 300k espécies
-   - Recuperação de literatura relevante (PDFs)
-   - Consultas em linguagem natural sobre conceitos taxonômicos
-   - Análise de relações filogenéticas e ecológicas
+4. **Generalizar para Novos Organismos**
+   - Classificar espécies não vistas durante treinamento
+   - Sugerir classificações com scores de confiança
+   - Aplicar conhecimento para detecção de potenciais novas espécies
 
-## 🏗️ Arquitetura Proposta
-
-### Arquitetura Geral
+## 🏗️ Arquitetura do Modelo
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│                   Interface & Application                 │
+│                   Input Processing                        │
 │  ┌────────────────┐  ┌────────────────┐  ┌────────────┐ │
-│  │   Search UI    │  │   REST API     │  │  Notebooks │ │
+│  │ Descrições     │  │ Metadados      │  │  Ocorrência│ │
+│  │ Textuais       │  │ Taxonômicos    │  │  Espacial  │ │
 │  └────────────────┘  └────────────────┘  └────────────┘ │
 └──────────────────────────────────────────────────────────┘
                            │
 ┌──────────────────────────────────────────────────────────┐
-│                   AI/ML Processing                        │
-│  ┌────────────────┐  ┌────────────────┐  ┌────────────┐ │
-│  │ Embedding      │  │ LLM / RAG      │  │ Fine-tuned │ │
-│  │ Models         │  │ (LangChain)    │  │ Bio Models │ │
-│  └────────────────┘  └────────────────┘  └────────────┘ │
+│              Tokenization & Embedding Layer              │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ Transformer-based Encoder (BERT-like)             │ │
+│  │ - Text encoder para descrições                     │ │
+│  │ - Tabular encoder para metadados                   │ │
+│  │ - Geospatial encoder para distribuição            │ │
+│  └────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────┘
                            │
 ┌──────────────────────────────────────────────────────────┐
-│                    Vector Store Layer                     │
-│  ┌────────────────┐  ┌────────────────┐  ┌────────────┐ │
-│  │ PostgreSQL +   │  │ Meilisearch    │  │   FAISS    │ │
-│  │ pgvector       │  │ (Hybrid Search)│  │   (Index)  │ │
-│  └────────────────┘  └────────────────┘  └────────────┘ │
+│              Taxonomic Representation Layer              │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ Hierarchical Embeddings                           │ │
+│  │ - Embeddings de taxa (espécies como tokens)       │ │
+│  │ - Embeddings hierárquicos (Reino → Espécie)      │ │
+│  │ - Similarity learning entre taxa relacionadas    │ │
+│  └────────────────────────────────────────────────────┘ │
 └──────────────────────────────────────────────────────────┘
                            │
 ┌──────────────────────────────────────────────────────────┐
-│                    Data Sources                          │
+│              Classification & Output Layer               │
+│  ┌────────────────────────────────────────────────────┐ │
+│  │ Species Classifier                                │ │
+│  │ - Matching com taxa conhecidas                    │ │
+│  │ - Scoring de confiança                            │ │
+│  │ - Classificação hierárquica completa             │ │
+│  └────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────┘
+                           │
+┌──────────────────────────────────────────────────────────┐
+│                    Training Data                         │
 │  ┌────────────────┐  ┌────────────────┐  ┌────────────┐ │
-│  │ MongoDB        │  │ PDF Documents  │  │ Darwin Core│ │
-│  │ (300k species) │  │ (Literature)   │  │ Records    │ │
+│  │ 300k Espécies  │  │ 11M Ocorrências│  │ Literatura │ │
+│  │ (MongoDB)      │  │ (Darwin Core)  │  │ (PDFs)     │ │
 │  └────────────────┘  └────────────────┘  └────────────┘ │
 └──────────────────────────────────────────────────────────┘
 ```
 
 ### Componentes Principais
 
-#### 1. **Data Sources**
+#### 1. **Input Processing**
 
-- **MongoDB**: 300.000 nomes de espécies com metadados taxonômicos
-- **Darwin Core Records**: 11 milhões de registros de ocorrência geoespaciais
-- **PDF Library**: Monografias, revisões taxonômicas, descrições de novas espécies
+- **Text Encoder**: Processa descrições textuais e literatura científica
+- **Metadata Processor**: Extrai características dos dados estruturados (Darwin Core)
+- **Geospatial Encoder**: Codifica padrões de distribuição e ocorrência
+- **Multi-modal Fusion**: Integra múltiplas modalidades de entrada
 
-#### 2. **Vector Store & Search**
+#### 2. **Embedding & Representation Layer**
 
-- **PostgreSQL + pgvector**: Armazenamento de embeddings de taxa e documentos
-- **Meilisearch**: Busca híbrida (full-text + semantic search)
-- **FAISS/Annoy**: Índices para busca rápida de similaridade vetorial
+- **Transformer Encoder**: Modelo base (BERT-like) otimizado para taxonomia
+- **Hierarchical Embedding**: Aprende hierarquias taxonômicas (Reino → Espécie)
+- **Contrastive Learning**: Aprende similaridades entre taxa relacionadas
+- **Species Token Embeddings**: Representa cada espécie como um vetor semântico
 
-#### 3. **Embedding & Representation Layer**
+#### 3. **Classification Layer**
 
-- **Embedding Generator**: Cria vetores para cada espécie/nome científico
-- **Document Embedder**: Processa literatura científica em chunked embeddings
-- **Fine-tuned Models**: Modelos otimizados para conceitos biológicos
+- **Species Matcher**: Matching de novos organismos com taxa conhecidas
+- **Hierarchical Classifier**: Classifica em múltiplos níveis taxonômicos
+- **Confidence Scorer**: Fornece scores de confiança nas predições
+- **Synonym Resolver**: Resolve sinonímias e nomes alternativos
 
-#### 4. **LLM & RAG System**
+#### 4. **Training Framework**
 
-- **LLM Engine**: Modelos de linguagem para raciocínio taxonômico
-- **RAG Pipeline**: Recuperação contextual de literatura + síntese
-- **Prompt Engineering**: Prompts especializados para taxonomia
-
-#### 5. **Application Services**
-
-- **Name Resolution**: Matching de nomes científicos e resolução de sinonímias
-- **Taxonomic Hierarchy**: Navegação e queries na árvore taxonômica
-- **Species Classifier**: Classificação de organismos descritos
+- **Data Preparation**: Pipeline para limpeza e formatação dos dados
+- **Batch Processing**: Processamento eficiente de 300k espécies + 11M ocorrências
+- **Loss Functions**: Contrastive loss, triplet loss, taxon-aware losses
+- **Evaluation Metrics**: Acurácia, ranking metrics, F1-score por nível hierárquico
 
 ## 🛠️ Stack Tecnológico
 
-### Backend Core
+### Deep Learning & Model Development
 
 - **Python 3.10+**: Linguagem principal
-- **FastAPI**: Framework para APIs REST
-- **Pydantic**: Validação de dados e schemas
+- **PyTorch 2.0+**: Framework de deep learning
+  - DDP (Distributed Data Parallel) para treinamento em GPU
+  - Mixed precision training (AMP)
+  - TorchScript para serialização
+- **Hugging Face Transformers**: Modelos pré-treinados base
+  - BERT, RoBERTa, DeBERTa como backbones
+  - DistilBERT para versões mais leves
 
-### Bancos de Dados
+### Data Management & Processing
 
-- **PostgreSQL 16+**: Banco de dados relacional
-  - Extensão `pgvector`: Armazenamento e busca de vetores
-  - Extensão `pg_trgm`: Busca por similaridade de texto
-- **MongoDB**: Dados originais em Darwin Core
-- **Meilisearch 1.8+**: Motor de busca híbrida
-  - Suporte a busca semântica (embeddings)
-  - Typo tolerance e instant search
-  - Filtros e faceted search
+- **Pandas**: Manipulação de dados estruturados (Darwin Core)
+- **NumPy**: Operações numéricas em larga escala
+- **GeoPandas**: Processamento de dados geoespaciais
+- **Polars** (alternativa): Processamento rápido de big data
+- **PyArrow**: Serialização eficiente de dados
 
-### AI/ML Stack
+### Input Data Processing
 
-#### Large Language Models
+- **spaCy**: NLP para processamento de textos científicos
+- **Docling**: Extração de conteúdo de PDFs
+- **PyMuPDF**: Processamento alternativo de PDFs
+- **NLTK**: Tokenização e análise linguística
+- **scikit-learn**: Pré-processamento e transformação
 
-- **Ollama**: Runtime para modelos locais
-  - Llama 3.1/3.2 (8B, 70B)
-  - Mistral 7B/Mixtral 8x7B
-  - Qwen 2.5 (especializado em raciocínio)
+### Model Training & Evaluation
 
-#### Embedding Models
+- **PyTorch Lightning**: Abstração para treinamento organizado
+- **Weights & Biases**: Rastreamento de experimentos
+- **MLflow**: Versionamento de modelos e artefatos
+- **Optuna**: Hyperparameter optimization
+- **Scikit-learn**: Métricas de avaliação (F1, precision, recall, ranking metrics)
 
-- **sentence-transformers**: Modelos multilíngues
-  - `all-MiniLM-L6-v2`: Rápido e eficiente
-  - `paraphrase-multilingual-mpnet-base-v2`: Multilíngue
-- **BioLinkBERT**: Especializado em textos biomédicos
-- **Custom embeddings**: Treinados em literatura taxonômica
+### Embedding & Vector Operations
 
-#### Computer Vision (Opcional - Fase 2)
+- **FAISS**: Indexação rápida de vetores (Facebook AI)
+- **Annoy**: Indexação aproximada de vizinhos
+- **Sentence-Transformers**: Modelos de embedding pré-treinados
+  - Para inicialização ou fine-tuning
 
-- **PyTorch Wildlife**: Detecção e classificação de animais
-- **BIOSCAN-5M models**: Classificação de insetos
-- **YOLO v11**: Detecção de objetos/espécies em imagens
+### Data Sources & Databases
 
-#### RAG Framework
+- **MongoDB 5.0+**: Armazenamento de 300k espécies com metadados
+- **PostgreSQL 16+** (opcional): Backup relacional dos dados
+  - Extensão `pgvector` (opcional): Armazenamento de embeddings
 
-- **LangChain**: Orquestração de LLMs e RAG
-- **LlamaIndex**: Indexação e recuperação de documentos
-- **Chroma/FAISS**: Stores vetoriais alternativos (desenvolvimento)
+### Visualization & Analysis
 
-### Processamento de Documentos
+- **Matplotlib/Seaborn**: Gráficos estáticos
+- **Plotly**: Análise interativa de embeddings
+- **UMAP/t-SNE**: Redução de dimensionalidade para visualização
+- **Pandas Profiling**: Análise exploratória dos dados
 
-- **Docling**: Extração de conteúdo de PDFs científicos
-- **PyMuPDF**: Processamento de PDFs
-- **BeautifulSoup**: Parsing de HTML
-- **python-docx**: Processamento de documentos Word
+### Development & Deployment
 
-### Data Processing
-
-- **Pandas**: Manipulação de dados estruturados
-- **NumPy**: Operações numéricas
-- **GeoPandas**: Dados geoespaciais
-- **Shapely**: Geometrias e análises espaciais
-
-### Visualização
-
-- **Plotly**: Gráficos interativos
-- **Folium**: Mapas interativos
-- **Matplotlib/Seaborn**: Visualizações estáticas
-- **Dash**: Dashboards interativos
-
-### Containerização
-
-- **Docker**: Containerização de serviços
-- **Docker Compose**: Orquestração local
-- **UNRAID**: Servidor host para containers
-
-### Monitoramento e Logging
-
-- **Prometheus**: Métricas
-- **Grafana**: Dashboards de monitoramento
-- **Loguru**: Logging estruturado
+- **Jupyter**: Notebooks para experimentação e prototipagem
+- **Git**: Controle de versão
+- **DVC** (Data Version Control): Versionamento de datasets e modelos
+- **Docker**: Containerização (opcional)
+- **CUDA/cuDNN**: Aceleração GPU em NVIDIA
 
 ## 🤖 Modelos e Repositórios Relevantes
 
