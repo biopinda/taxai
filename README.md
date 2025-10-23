@@ -1,6 +1,6 @@
 # TaxAI - Desenvolvimento de um Modelo de Inteligência Artificial com Capacidade de Compreender o Conceito de Espécie Biológica
 
-> **Um modelo de IA especializado em taxonomia que compreende e representa espécies biológicas (taxa) como tokens codificando características fenotípicas/genotípicas, relações hierárquicas e ecológicas**
+> **Um modelo de IA especializado em taxonomia que compreende e representa espécies (taxa) como tokens codificando características fenotípicas/genotípicas, relações hierárquicas e ecológicas**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/)
