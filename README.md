@@ -1,6 +1,5 @@
 # taxai
 Desenvolvimento de uma inteligência artificial que entenda o conceito de espécie
-Vou ajudá-lo a desenvolver este fascinante projeto de IA para compreensão do conceito de espécie biológica. Primeiro, vou pesquisar sobre os fundamentos científicos e as soluções tecnológicas disponíveis.Excelente! Com base em minha pesquisa sobre o conceito de espécie, biodiversity informatics e soluções tecnológicas disponíveis, vou criar um planejamento detalhado para o seu projeto **TaxAI**.
 
 ## 📋 **Planejamento do Projeto TaxAI - Sistema de IA para Conceitos Taxonômicos**
 
